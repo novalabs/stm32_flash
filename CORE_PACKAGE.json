@@ -1,0 +1,5 @@
+{
+  "name": "stm32_flash",
+  "description": "STM32F flash driver",
+  "provider": "core"
+}
