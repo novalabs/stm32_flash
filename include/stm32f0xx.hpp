@@ -1,12 +1,10 @@
-/*
- * stm32f30x.hpp
+/* COPYRIGHT (c) 2016-2017 Nova Labs SRL
  *
- *  Created on: 9 May 2016
- *      Author: davide
+ * All rights reserved. All use of this software and documentation is
+ * subject to the License Agreement located in the file LICENSE.
  */
 
-#ifndef STM32F0XX_HPP_
-#define STM32F0XX_HPP_
+#pragma once
 
 #include "stm32f0xx.h"
 
@@ -74,5 +72,3 @@ FLASH_ADDRESS_SECTOR(
 }
 }
 }
-
-#endif /* STM32F30X_HPP_ */

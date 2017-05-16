@@ -1,3 +1,9 @@
+/* COPYRIGHT (c) 2016-2017 Nova Labs SRL
+ *
+ * All rights reserved. All use of this software and documentation is
+ * subject to the License Agreement located in the file LICENSE.
+ */
+
 #include <core/stm32_flash/FlashSegment.hpp>
 #include <osal.h>
 
@@ -36,19 +42,6 @@ FlashSegment::unlock()
 {
     FLASH_Unlock();
     return true;
-}
-
-inline
-bool
-FlashSegment::isAddressValid(
-    Address address
-)
-{
-    if ((address < _from) || (address >= _to)) {
-        return false;
-    } else {
-        return true;
-    }
 }
 
 bool

@@ -1,12 +1,11 @@
-/*
- * stm32f30x.h
+/* COPYRIGHT (c) 2016-2017 Nova Labs SRL
  *
- *  Created on: 5 May 2016
- *      Author: davide
+ * All rights reserved. All use of this software and documentation is
+ * subject to the License Agreement located in the file LICENSE.
  */
 
-#ifndef STM32F30X_H_
-#define STM32F30X_H_
+
+#pragma once
 
 #include <board.h>
 
@@ -17,5 +16,3 @@
 #define  FLASH_OBR_RDPRT2                    ((uint32_t)0x00000004)        /*!< Read protection Level 2 */
 
 #define assert_param(expr) ((void)0)
-
-#endif /* STM32F30X_H_ */
