@@ -135,6 +135,16 @@ Storage::commit()
 
     // Swap the 2 banks
     FlashSegment* tmp = _readBank;
+
+    if (tmp == nullptr) {
+        // It was invalid. We cannot assign it to write...
+        if (_writeBank == &_bank1) {
+            tmp = &_bank2;
+        } else {
+            tmp = &_bank1;
+        }
+    }
+
     _readBank  = _writeBank;
     _writeBank = tmp;
 
