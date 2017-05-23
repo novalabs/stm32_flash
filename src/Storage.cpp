@@ -79,11 +79,16 @@ Storage::erase()
 {
     bool success = true;
 
-    success   &= _bank1.erase();
-    success   &= _bank2.erase();
+    success &= _bank1.erase();
+    success &= _bank2.erase();
+
+    osalSysLock();
+
     _cnt       = 0xFFFF;
     _readBank  = nullptr;
     _writeBank = &_bank1;
+
+    osalSysUnlock();
 
     return success;
 }
@@ -114,7 +119,6 @@ Storage::commit()
 
     if (!_writeReady) {
         osalSysUnlock();
-
         return false;
     }
 
@@ -156,7 +160,13 @@ Storage::commit()
 bool
 Storage::isValid() const
 {
-    return _readBank != nullptr;
+    osalSysLock();
+
+    bool valid = _readBank != nullptr;
+
+    osalSysUnlock();
+
+    return valid;
 }
 
 bool
