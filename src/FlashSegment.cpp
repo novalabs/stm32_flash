@@ -71,9 +71,10 @@ FlashSegment::eraseSectorAt(
         return false;
     }
 
-    osalSysDisable();
+    __disable_irq();
     bool success = FLASH_ErasePage(address) == FLASH_COMPLETE;
-    osalSysEnable();
+    __enable_irq();
+
 
     return success;
 }
@@ -123,9 +124,10 @@ FlashSegment::write32(
         return false;
     }
 
-    osalSysDisable();
+    __disable_irq();
     bool success = FLASH_ProgramWord(address, data) == FLASH_COMPLETE;
-    osalSysEnable();
+    __enable_irq();
+
     return success;
 }
 
@@ -141,9 +143,10 @@ FlashSegment::write32_offset(
         return false;
     }
 
-    osalSysDisable();
+    __disable_irq();
     bool success = FLASH_ProgramWord(address, data) == FLASH_COMPLETE;
-    osalSysEnable();
+    __enable_irq();
+
     return success;
 }
 
@@ -157,9 +160,10 @@ FlashSegment::write16(
         return false;
     }
 
-    osalSysDisable();
+    __disable_irq();
     bool success = FLASH_ProgramHalfWord(address, data) == FLASH_COMPLETE;
-    osalSysEnable();
+    __enable_irq();
+
     return success;
 }
 
@@ -175,9 +179,10 @@ FlashSegment::write16_offset(
         return false;
     }
 
-    osalSysDisable();
+    __disable_irq();
     bool success = FLASH_ProgramHalfWord(address, data) == FLASH_COMPLETE;
-    osalSysEnable();
+    __enable_irq();
+
     return success;
 }
 }
