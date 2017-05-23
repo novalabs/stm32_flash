@@ -8,13 +8,17 @@
 #include <osal.h>
 
 #if defined(STM32F303xx)
-  #include <core/stm32_flash/stm32f30x_flash.h>
-  #include <core/stm32_flash/stm32f30x.hpp>
+    #include <core/stm32_flash/stm32f30x_flash.h>
+    #include <core/stm32_flash/stm32f30x.hpp>
 #elif defined(STM32F091xC)
-  #include <core/stm32_flash/stm32f0xx_flash.h>
-  #include <core/stm32_flash/stm32f0xx.hpp>
+    #include <core/stm32_flash/stm32f0xx_flash.h>
+    #include <core/stm32_flash/stm32f0xx.hpp>
+#elif defined(STM32F407xx)
+	#include<core/stm32_flash/stm32f4xx_flash.h>
+    #include <core/stm32_flash/stm32f4xx.hpp>
+    #define FLASH_ErasePage(x) FLASH_EraseSector(x, VoltageRange_3)
 #else
-  #error "Chip not supported"
+    #error "Chip not supported"
 #endif
 
 namespace core {
