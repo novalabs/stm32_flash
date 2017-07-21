@@ -14,7 +14,13 @@
 namespace core {
 namespace stm32_flash {
 #ifdef STM32F303xC
+#if defined(STM32F303CB)
+static const std::size_t FLASH_NUMBER_OF_PAGES = 64;
+#elif defined(STM32F303CC)
 static const std::size_t FLASH_NUMBER_OF_PAGES = 128;
+#else
+#error "Unknow chip type"
+#endif
 #else
 #error "Unknown flash memory map"
 #endif
@@ -72,4 +78,3 @@ FLASH_ADDRESS_SECTOR(
 }
 }
 }
-

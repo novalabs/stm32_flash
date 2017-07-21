@@ -14,7 +14,7 @@
     #include <core/stm32_flash/stm32f0xx_flash.h>
     #include <core/stm32_flash/stm32f0xx.hpp>
 #elif defined(STM32F407xx)
-	#include<core/stm32_flash/stm32f4xx_flash.h>
+  #include <core/stm32_flash/stm32f4xx_flash.h>
     #include <core/stm32_flash/stm32f4xx.hpp>
     #define FLASH_ErasePage(x) FLASH_EraseSector(x, VoltageRange_3)
 #else
