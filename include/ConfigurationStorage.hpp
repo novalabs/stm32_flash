@@ -17,7 +17,7 @@ namespace stm32_flash {
 struct ModuleConfiguration {
     uint32_t imageCRC;
     uint32_t canID;
-    char     name[14];
+    char     name[16];
     uint8_t  padding[32 - sizeof(name) - sizeof(imageCRC) - sizeof(canID)];
 }
 
