@@ -63,7 +63,6 @@ public:
     bool
     unlock();
 
-
 private:
     FlashSegment& _bank1;
     FlashSegment& _bank2;
@@ -73,6 +72,13 @@ private:
     uint32_t      _head;
     bool          _writeReady;
     std::size_t   _bankSize;
+
+    static const std::size_t CNT_OFFSET = 0;
+    static const std::size_t CRC_OFFSET = 4;
+    static const std::size_t DATA_OFFSET = 4 + 4;
+
+private:
+    uint32_t getBankCRC(FlashSegment& bank);
 };
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -87,7 +93,7 @@ Storage::operator void*() const
 Address
 Storage::getAddress() const
 {
-    return _readBank->from() + 4;
+    return _readBank->from() + DATA_OFFSET;
 }
 
 bool
@@ -96,7 +102,7 @@ Storage::write16(
     uint16_t data
 )
 {
-    return _writeBank->write16_offset(offset + 4, data);
+    return _writeBank->write16_offset(offset + DATA_OFFSET, data);
 }
 
 bool
@@ -105,13 +111,13 @@ Storage::write32(
     uint32_t data
 )
 {
-    return _writeBank->write32_offset(offset + 4, data);
+    return _writeBank->write32_offset(offset + DATA_OFFSET, data);
 }
 
 std::size_t
 Storage::size() const
 {
-    return _bankSize - 4;
+    return _bankSize - DATA_OFFSET;
 }
 }
 }

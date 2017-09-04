@@ -4,8 +4,9 @@
  * subject to the License Agreement located in the file LICENSE.
  */
 
-#include <core/stm32_flash/Storage.hpp>
 #include <osal.h>
+#include <core/stm32_flash/Storage.hpp>
+#include <core/stm32_crc/CRC.hpp>
 
 #include <algorithm>
 
@@ -16,29 +17,35 @@ Storage::Storage(
     FlashSegment& bank2
 ) : _bank1(bank1), _bank2(bank2), _cnt(0xFFFF), _readBank(nullptr), _writeBank(nullptr), _head(0), _writeReady(false), _bankSize(0)
 {
-    uint16_t cnt1       = _bank1.read16_offset(0);
-    uint16_t cnt2       = _bank2.read16_offset(0);
+    uint16_t cnt1       = _bank1.read16_offset(CNT_OFFSET);
+    uint16_t cnt2       = _bank2.read16_offset(CNT_OFFSET);
+    uint32_t crc1       = _bank1.read32_offset(CRC_OFFSET);
+    uint32_t crc2       = _bank2.read32_offset(CRC_OFFSET);
     bool     bank1Valid = false;
     bool     bank2Valid = false;
 
     if (cnt1 != 0xFFFF) {
-        bank1Valid = true;
+    	if(crc1 == getBankCRC(_bank1)) {
+    		bank1Valid = true;
+    	}
     }
 
     if (cnt2 != 0xFFFF) {
-        bank2Valid = true;
+    	if(crc2 == getBankCRC(_bank2)) {
+    		bank2Valid = true;
+    	}
     }
 
     if (bank1Valid && bank2Valid) {
         // Both banks are valid, choose the newest
         if (cnt1 > cnt2) {
             _cnt       = cnt1;
-            _head      = _bank1.from() + 4;
+            _head      = _bank1.from() + DATA_OFFSET;
             _readBank  = &_bank1;
             _writeBank = &_bank2;
         } else if (cnt2 > cnt1) {
             _cnt       = cnt2;
-            _head      = _bank2.from() + 4;
+            _head      = _bank2.from() + DATA_OFFSET;
             _readBank  = &_bank2;
             _writeBank = &_bank1;
         } else {
@@ -133,7 +140,8 @@ Storage::commit()
     bool success = true;
 
     // write bank is always defined
-    success &= _writeBank->write16_offset(0, _cnt);
+    success &= _writeBank->write16_offset(CNT_OFFSET, _cnt);
+    success &= _writeBank->write32_offset(CRC_OFFSET, getBankCRC(*_writeBank));
 
     _writeBank->lock();
 
@@ -180,5 +188,16 @@ Storage::unlock()
 {
     return _writeBank->unlock();
 }
+
+uint32_t Storage::getBankCRC(FlashSegment& bank) {
+	if (((bank.size() - DATA_OFFSET) % 4) != 0) {
+		chSysHalt("Data size not multiple of 4");
+    }
+
+	core::stm32_crc::CRC::init();
+	core::stm32_crc::CRC::setPolynomialSize(core::stm32_crc::CRC::PolynomialSize::POLY_32);
+	return core::stm32_crc::CRC::CRCBlock(reinterpret_cast<uint32_t*>(bank.from() + DATA_OFFSET), (bank.size() - DATA_OFFSET) / sizeof(uint32_t));
+}
+
 }
 }
