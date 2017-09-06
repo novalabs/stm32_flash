@@ -25,15 +25,15 @@ Storage::Storage(
     bool     bank2Valid = false;
 
     if (cnt1 != 0xFFFF) {
-    	if(crc1 == getBankCRC(_bank1)) {
-    		bank1Valid = true;
-    	}
+        if (crc1 == getBankCRC(_bank1)) {
+            bank1Valid = true;
+        }
     }
 
     if (cnt2 != 0xFFFF) {
-    	if(crc2 == getBankCRC(_bank2)) {
-    		bank2Valid = true;
-    	}
+        if (crc2 == getBankCRC(_bank2)) {
+            bank2Valid = true;
+        }
     }
 
     if (bank1Valid && bank2Valid) {
@@ -189,15 +189,18 @@ Storage::unlock()
     return _writeBank->unlock();
 }
 
-uint32_t Storage::getBankCRC(FlashSegment& bank) {
-	if (((bank.size() - DATA_OFFSET) % 4) != 0) {
-		chSysHalt("Data size not multiple of 4");
+uint32_t
+Storage::getBankCRC(
+    FlashSegment& bank
+)
+{
+    if (((bank.size() - DATA_OFFSET) % 4) != 0) {
+        chSysHalt("Data size not multiple of 4");
     }
 
-	core::stm32_crc::CRC::init();
-	core::stm32_crc::CRC::setPolynomialSize(core::stm32_crc::CRC::PolynomialSize::POLY_32);
-	return core::stm32_crc::CRC::CRCBlock(reinterpret_cast<uint32_t*>(bank.from() + DATA_OFFSET), (bank.size() - DATA_OFFSET) / sizeof(uint32_t));
+    core::stm32_crc::CRC::init();
+    core::stm32_crc::CRC::setPolynomialSize(core::stm32_crc::CRC::PolynomialSize::POLY_32);
+    return core::stm32_crc::CRC::CRCBlock(reinterpret_cast<uint32_t*>(bank.from() + DATA_OFFSET), (bank.size() - DATA_OFFSET) / sizeof(uint32_t));
 }
-
 }
 }

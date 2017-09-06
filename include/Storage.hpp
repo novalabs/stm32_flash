@@ -63,6 +63,7 @@ public:
     bool
     unlock();
 
+
 private:
     FlashSegment& _bank1;
     FlashSegment& _bank2;
@@ -73,12 +74,15 @@ private:
     bool          _writeReady;
     std::size_t   _bankSize;
 
-    static const std::size_t CNT_OFFSET = 0;
-    static const std::size_t CRC_OFFSET = 4;
+    static const std::size_t CNT_OFFSET  = 0;
+    static const std::size_t CRC_OFFSET  = 4;
     static const std::size_t DATA_OFFSET = 4 + 4;
 
 private:
-    uint32_t getBankCRC(FlashSegment& bank);
+    uint32_t
+    getBankCRC(
+        FlashSegment& bank
+    );
 };
 
 // --------------------------------------------------------------------------------------------------------------------
