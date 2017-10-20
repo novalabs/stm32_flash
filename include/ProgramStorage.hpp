@@ -55,10 +55,13 @@ public:
     bool
     unlock();
 
+    uint32_t updateCRC();
+    uint32_t crc();
 
 private:
     FlashSegment& _storage;
     bool          _ready;
+    uint32_t      _crc;
 };
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -108,6 +111,11 @@ ProgramStorage::write16(
     } else {
         return false;
     }
+}
+
+inline uint32_t
+ProgramStorage::crc() {
+    return _crc;
 }
 }
 }

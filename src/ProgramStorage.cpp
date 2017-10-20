@@ -4,15 +4,27 @@
  * subject to the License Agreement located in the file LICENSE.
  */
 
-#include <core/stm32_flash/ProgramStorage.hpp>
 #include <osal.h>
+#include <core/stm32_crc/CRC.hpp>
+#include <core/stm32_flash/ProgramStorage.hpp>
 
 namespace core {
 namespace stm32_flash {
 ProgramStorage::ProgramStorage(
     FlashSegment& storage
-) : _storage(storage), _ready(false) {}
+) : _storage(storage), _ready(false), _crc(0) {
+}
 
+uint32_t
+ProgramStorage::updateCRC() {
+    core::stm32_crc::CRC::init();
+    core::stm32_crc::CRC::setPolynomialSize(core::stm32_crc::CRC::PolynomialSize::POLY_32);
+    core::stm32_crc::CRC::CRCBlock((uint32_t*)from(), size() / sizeof(uint32_t));
+
+    _crc =  core::stm32_crc::CRC::getCRC();
+
+    return _crc;
+}
 
 bool
 ProgramStorage::erase()
