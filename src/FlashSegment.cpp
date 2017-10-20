@@ -75,9 +75,9 @@ FlashSegment::eraseSectorAt(
         return false;
     }
 
-    __disable_irq();
+    //__disable_irq();
     bool success = FLASH_ErasePage(address) == FLASH_COMPLETE;
-    __enable_irq();
+    //__enable_irq();
 
 
     return success;
@@ -128,9 +128,9 @@ FlashSegment::write32(
         return false;
     }
 
-    __disable_irq();
+    //__disable_irq();
     bool success = FLASH_ProgramWord(address, data) == FLASH_COMPLETE;
-    __enable_irq();
+    //__enable_irq();
 
     return success;
 }
@@ -147,9 +147,9 @@ FlashSegment::write32_offset(
         return false;
     }
 
-    __disable_irq();
+    //__disable_irq();
     bool success = FLASH_ProgramWord(address, data) == FLASH_COMPLETE;
-    __enable_irq();
+    //__enable_irq();
 
     return success;
 }
@@ -164,9 +164,9 @@ FlashSegment::write16(
         return false;
     }
 
-    __disable_irq();
+    //__disable_irq();
     bool success = FLASH_ProgramHalfWord(address, data) == FLASH_COMPLETE;
-    __enable_irq();
+    //__enable_irq();
 
     return success;
 }
@@ -183,9 +183,9 @@ FlashSegment::write16_offset(
         return false;
     }
 
-    __disable_irq();
+    //__disable_irq();
     bool success = FLASH_ProgramHalfWord(address, data) == FLASH_COMPLETE;
-    __enable_irq();
+    //__enable_irq();
 
     return success;
 }
