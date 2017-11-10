@@ -13,10 +13,30 @@
 #elif defined(STM32F091xC)
     #include <core/stm32_flash/stm32f0xx_flash.h>
     #include <core/stm32_flash/stm32f0xx.hpp>
-#elif defined(STM32F407xx)
-  #include <core/stm32_flash/stm32f4xx_flash.h>
+#elif defined(STM32F407xx) || defined(STM32F417xx)
+    #include <core/stm32_flash/stm32f4xx_flash.h>
     #include <core/stm32_flash/stm32f4xx.hpp>
-    #define FLASH_ErasePage(x) FLASH_EraseSector(x, VoltageRange_3)
+FLASH_Status FLASH_ErasePage(uint32_t Page_Address) {
+	switch(Page_Address) {
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(0): FLASH_EraseSector(FLASH_Sector_0, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(1): FLASH_EraseSector(FLASH_Sector_1, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(2): FLASH_EraseSector(FLASH_Sector_2, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(3): FLASH_EraseSector(FLASH_Sector_3, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(4): FLASH_EraseSector(FLASH_Sector_4, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(5): FLASH_EraseSector(FLASH_Sector_5, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(6): FLASH_EraseSector(FLASH_Sector_6, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(7): FLASH_EraseSector(FLASH_Sector_7, VoltageRange_3); break;
+#if defined(STM32F407VG) || defined(STM32F417VG)
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(8): FLASH_EraseSector(FLASH_Sector_8, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(9): FLASH_EraseSector(FLASH_Sector_9, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(10): FLASH_EraseSector(FLASH_Sector_10, VoltageRange_3); break;
+		case core::stm32_flash::FLASH_SECTOR_ADDRESS(11): FLASH_EraseSector(FLASH_Sector_11, VoltageRange_3); break;
+#endif
+		default:
+			return FLASH_ERROR_OPERATION;
+	}
+	return FLASH_COMPLETE;
+}
 #else
     #error "Chip not supported"
 #endif
@@ -69,14 +89,14 @@ FlashSegment::eraseSectorAt(
     Address address
 )
 {
-    address = FLASH_SECTOR_ADDRESS(FLASH_ADDRESS_SECTOR(address)); // Offset 0 from sector start address!
+	volatile Address address2 = FLASH_SECTOR_ADDRESS(FLASH_ADDRESS_SECTOR(address)); // Offset 0 from sector start address!
 
-    if (!isAddressValid(address)) {
+    if (!isAddressValid(address2)) {
         return false;
     }
 
     //__disable_irq();
-    bool success = FLASH_ErasePage(address) == FLASH_COMPLETE;
+    bool success = FLASH_ErasePage(address2) == FLASH_COMPLETE;
     //__enable_irq();
 
 

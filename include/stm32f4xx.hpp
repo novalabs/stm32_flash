@@ -11,11 +11,14 @@
 #include <stdint.h>
 #include <cstddef>
 
+#if defined(STM32F407VE)
+#define FLASH_SIZE 512
+#endif
+
 namespace core {
 namespace stm32_flash {
-#ifdef STM32F407xx
-#warning "The following is a placeholder"
-static const std::size_t FLASH_NUMBER_OF_PAGES = 128;
+#if defined(STM32F407VE)
+static const std::size_t FLASH_NUMBER_OF_PAGES = 8;
 #else
 #error "Unknown flash memory map"
 #endif
@@ -25,9 +28,11 @@ FLASH_SECTOR_SIZE(
     std::size_t sector
 )
 {
-#ifdef STM32F407xx
-#warning "The following is a placeholder"
-    return sector < FLASH_NUMBER_OF_PAGES ? 0x800 : 0xFFFFFFFF;
+#if defined(STM32F407VE)
+    return sector < 4 ? 0x4000 :
+		   sector == 4 ? 0x10000 :
+		   sector < FLASH_NUMBER_OF_PAGES ? 0x20000 :
+		   0xFFFFFFFF;
 
 #else
 #error "Unknown flash memory map"
@@ -39,10 +44,10 @@ FLASH_SECTOR_OFFSET(
     std::size_t sector
 )
 {
-#ifdef STM32F407xx
-#warning "The following is a placeholder"
-    return sector < FLASH_NUMBER_OF_PAGES ? (0x800 * sector) : 0xFFFFFFFF;
-
+#if defined(STM32F407VE)
+	return sector == 0 ? 0 :
+		   sector < FLASH_NUMBER_OF_PAGES ? FLASH_SECTOR_OFFSET(sector - 1) + FLASH_SECTOR_SIZE(sector):
+		   0xFFFFFFFF;
 #else
 #error "Unknown flash memory map"
 #endif
@@ -53,9 +58,8 @@ FLASH_SECTOR_ADDRESS(
     std::size_t sector
 )
 {
-#ifdef STM32F407xx
-#warning "The following is a placeholder"
-    return sector < FLASH_NUMBER_OF_PAGES ? 0x08000000 + (0x800 * sector) : 0xFFFFFFFF;
+#if defined(STM32F407VE)
+    return sector < FLASH_NUMBER_OF_PAGES ? 0x08000000 + FLASH_SECTOR_OFFSET(sector) : 0xFFFFFFFF;
 
 #else
 #error "Unknown flash memory map"
@@ -67,9 +71,9 @@ FLASH_ADDRESS_SECTOR(
     uint32_t address
 )
 {
-#ifdef STM32F407xx
-#warning "The following is a placeholder"
-    return (address - 0x08000000) >> 11;
+#define X(N) (address >= FLASH_SECTOR_ADDRESS(N) && address < FLASH_SECTOR_ADDRESS(N+1)) ? N :
+#if defined(STM32F407VE)
+    return X(0) X(1) X(2) X(3) X(4) X(5) X(6) X(7) 0xFFFFFFFF;
 
 #else
 #error "Unknown flash memory map"
