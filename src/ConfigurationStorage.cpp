@@ -4,6 +4,7 @@
  * subject to the License Agreement located in the file LICENSE.
  */
 
+#include <core/common.hpp>
 #include <core/stm32_flash/ConfigurationStorage.hpp>
 
 namespace core {
@@ -47,7 +48,9 @@ ConfigurationStorage::writeModuleName(
     success &= _storage.format();
 
     if (success) {
+    	CORE_WARNINGS_NO_CAST_ALIGN
         tmp = reinterpret_cast<const uint16_t*>(name); //NOTE: warning: cast increases required alignment of target type - It is OK by design
+    	CORE_WARNINGS_RESET
 
         for (std::size_t i = 0; i < sizeof(ModuleConfiguration::name); i += 2) {
             success &= _storage.write16(offsetof(ModuleConfiguration, name) + i, *tmp++);
@@ -81,7 +84,9 @@ ConfigurationStorage::writeProgramCRC(
     success &= _storage.format();
 
     if (success) {
+    	CORE_WARNINGS_NO_CAST_ALIGN
         tmp = reinterpret_cast<const uint16_t*>(getModuleConfiguration()->name); //NOTE: warning: cast increases required alignment of target type - It is OK by design
+    	CORE_WARNINGS_RESET
 
         for (std::size_t i = 0; i < sizeof(ModuleConfiguration::name); i += 2) {
             success &= _storage.write16(offsetof(ModuleConfiguration, name) + i, *tmp++);
@@ -115,7 +120,9 @@ ConfigurationStorage::writeCanID(
     success &= _storage.format();
 
     if (success) {
+    	CORE_WARNINGS_NO_CAST_ALIGN
         tmp = reinterpret_cast<const uint16_t*>(getModuleConfiguration()->name); //NOTE: warning: cast increases required alignment of target type - It is OK by design
+    	CORE_WARNINGS_RESET
 
         for (std::size_t i = 0; i < sizeof(ModuleConfiguration::name); i += 2) {
             success &= _storage.write16(offsetof(ModuleConfiguration, name) + i, *tmp++);
@@ -180,7 +187,9 @@ ConfigurationStorage::beginWrite()
     success &= _storage.format();
 
     if (success) {
+    	CORE_WARNINGS_NO_CAST_ALIGN
         tmp = reinterpret_cast<const uint16_t*>(getModuleConfiguration()->name); //NOTE: warning: cast increases required alignment of target type - It is OK by design
+    	CORE_WARNINGS_RESET
 
         for (std::size_t i = 0; i < sizeof(ModuleConfiguration::name); i += 2) {
             success &= _storage.write16(offsetof(ModuleConfiguration, name) + i, *tmp++);
@@ -216,7 +225,9 @@ ConfigurationStorage::eraseUserConfiguration()
     success &= _storage.format();
 
     if (success) {
+    	CORE_WARNINGS_NO_CAST_ALIGN
         tmp = reinterpret_cast<const uint16_t*>(getModuleConfiguration()->name); //NOTE: warning: cast increases required alignment of target type - It is OK by design
+    	CORE_WARNINGS_RESET
 
         for (std::size_t i = 0; i < sizeof(ModuleConfiguration::name); i += 2) {
             success &= _storage.write16(offsetof(ModuleConfiguration, name) + i, *tmp++);
