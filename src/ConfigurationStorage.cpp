@@ -4,7 +4,12 @@
  * subject to the License Agreement located in the file LICENSE.
  */
 
+#ifdef CORE_IS_BOOTLOADER
+#define CORE_WARNINGS_NO_CAST_ALIGN
+#define CORE_WARNINGS_RESET
+#else
 #include <core/common.hpp>
+#endif
 #include <core/stm32_flash/ConfigurationStorage.hpp>
 
 namespace core {
