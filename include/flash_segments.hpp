@@ -14,6 +14,10 @@ extern const uint32_t user_address_top[];
 #endif
 #endif
 
+#if TAGS_SIZE > 0
+extern const uint32_t tags_address_bottom[];
+extern const uint32_t tags_address_top[];
+#endif
 extern const uint32_t conf1_address_bottom[];
 extern const uint32_t conf1_address_top[];
 extern const uint32_t conf2_address_bottom[];
@@ -29,6 +33,14 @@ static const uint32_t PROGRAM_FLASH_FROM = reinterpret_cast<uint32_t>(user_addre
 static const uint32_t PROGRAM_FLASH_TO   = reinterpret_cast<uint32_t>(user_address_top);
 static const uint32_t PROGRAM_FLASH_SIZE = PROGRAM_FLASH_TO - PROGRAM_FLASH_FROM;
 #endif
+#endif
+
+#if TAGS_SIZE > 0
+static const uint32_t TAGS_FLASH_FROM = reinterpret_cast<uint32_t>(tags_address_bottom);
+static const uint32_t TAGS_FLASH_TO   = reinterpret_cast<uint32_t>(tags_address_top);
+static const uint32_t TAGS_FLASH_SIZE = TAGS_FLASH_TO - TAGS_FLASH_FROM;
+#else
+static const uint32_t TAGS_FLASH_SIZE = 0;
 #endif
 
 static const uint32_t CONFIGURATION1_FLASH_FROM = reinterpret_cast<uint32_t>(conf1_address_bottom);
