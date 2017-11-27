@@ -18,6 +18,7 @@ extern const uint32_t user_address_top[];
 extern const uint32_t tags_address_bottom[];
 extern const uint32_t tags_address_top[];
 #endif
+
 extern const uint32_t conf1_address_bottom[];
 extern const uint32_t conf1_address_top[];
 extern const uint32_t conf2_address_bottom[];
@@ -32,6 +33,7 @@ namespace stm32_flash {
 static const uint32_t PROGRAM_FLASH_FROM = reinterpret_cast<uint32_t>(user_address_bottom);
 static const uint32_t PROGRAM_FLASH_TO   = reinterpret_cast<uint32_t>(user_address_top);
 static const uint32_t PROGRAM_FLASH_SIZE = PROGRAM_FLASH_TO - PROGRAM_FLASH_FROM;
+static const uint32_t PROGRAM_JUMP       = reinterpret_cast<uint32_t>(user_address_bottom);
 #endif
 #endif
 
