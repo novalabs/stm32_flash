@@ -13,6 +13,9 @@
 #elif defined(STM32F407xx)
     #define assert_param(expr) ((void)0)
     #include "stm32f4xx_flash.impl"
+#elif defined(STM32F417xx)
+    #define assert_param(expr) ((void)0)
+    #include "stm32f4xx_flash.impl"
 #else
     #error "Chip not supported"
 #endif
