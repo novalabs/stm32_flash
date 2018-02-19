@@ -50,7 +50,7 @@ FLASH_SECTOR_OFFSET(
 {
 #if defined(STM32F407VE) or defined(STM32F417VE) or defined(STM32F407VG) or defined(STM32F417VG)
 	return sector == 0 ? 0 :
-		   sector < FLASH_NUMBER_OF_PAGES ? FLASH_SECTOR_OFFSET(sector - 1) + FLASH_SECTOR_SIZE(sector):
+		   sector < FLASH_NUMBER_OF_PAGES ? FLASH_SECTOR_OFFSET(sector - 1) + FLASH_SECTOR_SIZE(sector - 1):
 		   0xFFFFFFFF;
 #else
 #error "Unknown flash memory map"
