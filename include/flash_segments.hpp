@@ -8,9 +8,12 @@
 #define FLASH_SEGMENTS_HPP_
 
 #ifdef CORE_IS_BOOTLOADER
-#if CORE_IS_BOOTLOADER
 extern const uint32_t user_address_bottom[];
 extern const uint32_t user_address_top[];
+#else
+#if BOOTLOADER_SIZE > 0
+extern const uint32_t bootloader_address_bottom[];
+extern const uint32_t bootloader_address_top[];
 #endif
 #endif
 
@@ -29,11 +32,15 @@ namespace stm32_flash {
 #include <stdint.h>
 
 #ifdef CORE_IS_BOOTLOADER
-#if CORE_IS_BOOTLOADER
 static const uint32_t PROGRAM_FLASH_FROM = reinterpret_cast<uint32_t>(user_address_bottom);
 static const uint32_t PROGRAM_FLASH_TO   = reinterpret_cast<uint32_t>(user_address_top);
 static const uint32_t PROGRAM_FLASH_SIZE = PROGRAM_FLASH_TO - PROGRAM_FLASH_FROM;
 static const uint32_t PROGRAM_JUMP       = reinterpret_cast<uint32_t>(user_address_bottom);
+#else
+#if BOOTLOADER_SIZE > 0
+static const uint32_t BOOTLOADER_FLASH_FROM = reinterpret_cast<uint32_t>(bootloader_address_bottom);
+static const uint32_t BOOTLOADER_FLASH_TO   = reinterpret_cast<uint32_t>(bootloader_address_top);
+static const uint32_t BOOTLOADER_FLASH_SIZE = BOOTLOADER_FLASH_TO - BOOTLOADER_FLASH_FROM;
 #endif
 #endif
 
